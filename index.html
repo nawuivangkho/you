@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>A Special Question ❤️</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4, #ffdde1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 600px;
+        min-height: 500px;
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 25px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    h1 {
+        color: #e6396d;
+        margin-bottom: 20px;
+        font-size: clamp(28px, 5vw, 42px);
+    }
+
+    h2 {
+        color: #444;
+        margin-bottom: 20px;
+        font-size: clamp(22px, 4vw, 32px);
+    }
+
+    p {
+        color: #555;
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .screen {
+        display: none;
+    }
+
+    .screen.active {
+        display: block;
+        animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* PUZZLE */
+
+    .puzzle-box {
+        margin: 30px auto;
+        max-width: 400px;
+    }
+
+    .question {
+        background: #fff0f5;
+        padding: 20px;
+        border-radius: 15px;
+        font-size: 22px;
+        font-weight: bold;
+        color: #d6336c;
+        margin-bottom: 25px;
+    }
+
+    .answers {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .answer-btn {
+        padding: 15px;
+        border: none;
+        border-radius: 12px;
+        background: #ff6b9a;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .answer-btn:hover {
+        transform: scale(1.05);
+        background: #e6396d;
+    }
+
+    /* LOVE QUESTION */
+
+    .love-area {
+        position: relative;
+        height: 250px;
+        margin-top: 20px;
+    }
+
+    .yes-btn,
+    .no-btn {
+        border: none;
+        padding: 15px 35px;
+        font-size: 22px;
+        border-radius: 30px;
+        cursor: pointer;
+        position: absolute;
+        transition: 0.3s ease;
+        font-weight: bold;
+    }
+
+    .yes-btn {
+        background: #ff3b6b;
+        color: white;
+        left: 25%;
+        top: 120px;
+        box-shadow: 0 8px 20px rgba(255,59,107,0.4);
+    }
+
+    .yes-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .no-btn {
+        background: #555;
+        color: white;
+        left: 55%;
+        top: 120px;
+    }
+
+    /* FINAL SCREEN */
+
+    .final-message {
+        padding-top: 40px;
+    }
+
+    .final-message h1 {
+        font-size: clamp(35px, 7vw, 55px);
+    }
+
+    .heart {
+        position: absolute;
+        font-size: 25px;
+        animation: floatHeart 5s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes floatHeart {
+        0% {
+            transform: translateY(100vh) scale(0.5);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-100vh) scale(1.5);
+            opacity: 0;
+        }
+    }
+
+    .restart-btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 25px;
+        background: #e6396d;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 500px) {
+
+        .container {
+            min-height: 480px;
+            padding: 20px;
+        }
+
+        .yes-btn {
+            left: 15%;
+        }
+
+        .no-btn {
+            left: 55%;
+        }
+
+        .love-area {
+            height: 280px;
+        }
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- PUZZLE SCREEN -->
+
+    <div class="screen active" id="puzzleScreen">
+
+        <h1>❤️ A Little Puzzle For You ❤️</h1>
+
+        <p>Solve this easy puzzle to unlock something special...</p>
+
+        <div class="puzzle-box">
+
+            <div class="question">
+                What is 2 + 2? ❤️
+            </div>
+
+            <div class="answers">
+
+                <button class="answer-btn" onclick="wrongAnswer()">3</button>
+
+                <button class="answer-btn" onclick="solvePuzzle()">4</button>
+
+                <button class="answer-btn" onclick="wrongAnswer()">5</button>
+
+                <button class="answer-btn" onclick="wrongAnswer()">22</button>
+
+            </div>
+
+        </div>
+
+        <p id="puzzleMessage"></p>
+
+    </div>
+
+
+    <!-- LOVE QUESTION -->
+
+    <div class="screen" id="loveScreen">
+
+        <h1>✨ You Solved It! ✨</h1>
+
+        <h2>But now I have one more question...</h2>
+
+        <h1>Will You Be Mine Forever? ❤️</h1>
+
+        <div class="love-area">
+
+            <button class="yes-btn" onclick="sayYes()">
+                YES ❤️
+            </button>
+
+            <button class="no-btn" id="noBtn">
+                NO 😢
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- FINAL SCREEN -->
+
+    <div class="screen" id="finalScreen">
+
+        <div class="final-message">
+
+            <h1>❤️ Thank You For Choosing Me ❤️</h1>
+
+            <p>
+                From this moment and for every moment ahead,
+                I promise to cherish every smile, every memory,
+                and every little moment we share.
+            </p>
+
+            <p>
+                You are not just someone special to me...
+                you are the person who makes my world brighter. ✨
+            </p>
+
+            <p>
+                No matter where life takes us,
+                I hope we continue choosing each other,
+                again and again, forever. ❤️
+            </p>
+
+            <h2>
+                I Love You ❤️ Forever and Always.
+            </h2>
+
+            <button class="restart-btn" onclick="restartGame()">
+                Play Again ❤️
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* PUZZLE FUNCTIONS */
+
+    function solvePuzzle() {
+
+        document.getElementById("puzzleScreen").classList.remove("active");
+
+        setTimeout(() => {
+            document.getElementById("loveScreen").classList.add("active");
+        }, 300);
+
+    }
+
+    function wrongAnswer() {
+
+        const message = document.getElementById("puzzleMessage");
+
+        message.innerHTML = "Oops! Try again 😄❤️";
+
+    }
+
+
+    /* NO BUTTON MOVEMENT */
+
+    const noBtn = document.getElementById("noBtn");
+
+    function moveNoButton() {
+
+        const area = document.querySelector(".love-area");
+
+        const maxX = area.clientWidth - noBtn.offsetWidth;
+
+        const maxY = area.clientHeight - noBtn.offsetHeight;
+
+        const randomX = Math.random() * maxX;
+
+        const randomY = Math.random() * maxY;
+
+        noBtn.style.left = randomX + "px";
+
+        noBtn.style.top = randomY + "px";
+
+    }
+
+
+    noBtn.addEventListener("mouseenter", moveNoButton);
+
+    noBtn.addEventListener("click", function(event) {
+
+        event.preventDefault();
+
+        moveNoButton();
+
+    });
+
+
+    noBtn.addEventListener("touchstart", function(event) {
+
+        event.preventDefault();
+
+        moveNoButton();
+
+    });
+
+
+    /* YES BUTTON */
+
+    function sayYes() {
+
+        document.getElementById("loveScreen").classList.remove("active");
+
+        setTimeout(() => {
+
+            document.getElementById("finalScreen").classList.add("active");
+
+            createHearts();
+
+        }, 300);
+
+    }
+
+
+    /* FLOATING HEARTS */
+
+    function createHearts() {
+
+        setInterval(() => {
+
+            const heart = document.createElement("div");
+
+            heart.classList.add("heart");
+
+            heart.innerHTML = "❤️";
+
+            heart.style.left = Math.random() * 100 + "vw";
+
+            heart.style.fontSize =
+                Math.random() * 25 + 20 + "px";
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+
+                heart.remove();
+
+            }, 5000);
+
+        }, 350);
+
+    }
+
+
+    /* RESTART GAME */
+
+    function restartGame() {
+
+        document.getElementById("finalScreen").classList.remove("active");
+
+        document.getElementById("puzzleScreen").classList.add("active");
+
+    }
+
+</script>
+
+</body>
+</html>
